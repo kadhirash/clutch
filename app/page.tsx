@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { PanicButton } from "./components/PanicButton";
 import { ResultCard } from "./components/ResultCard";
+import { ChatInterface } from "./components/ChatInterface";
 import { chatAction, ChatActionState } from "./actions/chat";
 import { BusinessEntity } from "./types/ai-chat";
 
@@ -120,13 +121,29 @@ export default function Home() {
       )}
 
       {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center w-full">
+      <div className="flex-1 w-full flex flex-col items-center max-w-4xl mx-auto">
         {result ? (
-          <ResultCard
-            business={result}
-            aiMessage={aiMessage || undefined}
-            onReset={handleReset}
-          />
+          <div className="w-full space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+            <ResultCard
+              business={result}
+              aiMessage={aiMessage || undefined}
+              onReset={handleReset}
+            />
+
+            {/* Chat Interface for refinement */}
+            <div className="w-full">
+              <ChatInterface
+                chatId={chatId}
+                initialMessage={aiMessage || "I found this place for you. Want something else?"}
+                userLocation={userLocation}
+                onUpdateBusiness={(newBusiness: BusinessEntity) => {
+                  setResult(newBusiness);
+                  // Optional: scroll to top to see new card
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            </div>
+          </div>
         ) : (
           <PanicButton onClick={handlePanicClick} isLoading={isLoading} />
         )}
