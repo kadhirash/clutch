@@ -21,19 +21,27 @@ export function VoiceInput({ onTranscript, isProcessing = false, disabled = fals
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
             if (SpeechRecognition) {
+                console.log("Speech Recognition supported");
                 const recognitionInstance = new SpeechRecognition();
                 recognitionInstance.continuous = false;
                 recognitionInstance.interimResults = false;
                 recognitionInstance.lang = "en-US";
 
-                recognitionInstance.onstart = () => setIsListening(true);
-                recognitionInstance.onend = () => setIsListening(false);
+                recognitionInstance.onstart = () => {
+                    console.log("Recognition started");
+                    setIsListening(true);
+                };
+                recognitionInstance.onend = () => {
+                    console.log("Recognition ended");
+                    setIsListening(false);
+                };
                 recognitionInstance.onerror = (event: any) => {
                     console.error("Speech recognition error", event.error);
                     setIsListening(false);
                 };
                 recognitionInstance.onresult = (event: any) => {
                     const transcript = event.results[0][0].transcript;
+                    console.log("Transcript received:", transcript);
                     if (transcript) {
                         onTranscript(transcript);
                     }
@@ -41,17 +49,24 @@ export function VoiceInput({ onTranscript, isProcessing = false, disabled = fals
 
                 setRecognition(recognitionInstance);
                 setIsSupported(true);
+            } else {
+                console.log("Speech Recognition NOT supported");
             }
         }
     }, [onTranscript]);
 
     const toggleListening = useCallback(() => {
-        if (!recognition) return;
+        if (!recognition) {
+            console.log("No recognition instance found");
+            return;
+        }
 
         if (isListening) {
+            console.log("Stopping recognition...");
             recognition.stop();
         } else {
             try {
+                console.log("Starting recognition...");
                 recognition.start();
             } catch (e) {
                 console.error("Failed to start recognition", e);
