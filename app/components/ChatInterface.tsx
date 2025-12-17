@@ -4,7 +4,6 @@ import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import { Send, User, Bot } from "lucide-react";
-import { VoiceInput } from "./VoiceInput";
 import { chatAction, ChatActionState } from "../actions/chat";
 import { BusinessEntity } from "../types/ai-chat";
 import { AiMessage } from "./AiMessage";
@@ -157,10 +156,6 @@ export function ChatInterface({
                             className="w-full bg-neutral-900 border border-neutral-800 text-foreground placeholder:text-neutral-500 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-neutral-700 transition-all"
                             disabled={isLoading}
                         />
-                        {/* Voice Input removed for stability */}
-                        {/* <div className="absolute right-2 top-1/2 -translate-y-1/2">
-            <VoiceInput onTranscript={handleVoiceTranscript} isProcessing={isLoading} />
-          </div> */}
                     </div>
                     <button
                         type="submit"

@@ -77,7 +77,7 @@ function parseRestaurantSuggestions(text: string): {
   const items: SuggestionItem[] = [];
 
   const nameVerbRegex =
-    /^((?:The|A|An)\s+)?([A-Z][\w'’&().,\-]*(?:\s+[A-Z][\w'’&().,\-]*){0,6})\s+(is|offers|serves|specializes|specialises|known|features|has|delivers|provides)\b/i;
+    /^((?:The|A|An)\s+)?([A-Z][\w'’&().,\-]*(?:\s+[A-Z][\w'’&().,\-]*){0,6})\s+(is|offers|serves|specializes|specialises|known|features|has|delivers|provides)\b/;
 
   for (const sentence of sentences) {
     const s = sentence.replace(/^\s+/, "").trim();
@@ -209,53 +209,53 @@ export function AiMessage({
             : undefined;
 
           return (
-          <li
-            key={`${item.title}-${idx}`}
-            className={
-              variant === "bubble"
-                ? "leading-relaxed"
-                : "rounded-xl sm:rounded-2xl border border-border-light glass-strong p-3 sm:p-4 text-left hover:border-accent/30 transition-all duration-200"
-            }
-          >
-            <div className="flex items-start gap-2 sm:gap-3">
-              <div className="mt-0.5 sm:mt-1 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-accent/20 text-accent text-xs sm:text-sm font-bold flex-shrink-0 shadow-glow-sm">
-                {idx + 1}
-              </div>
-              <div className="min-w-0 flex-1">
-                {item.title && (
+            <li
+              key={`${item.title}-${idx}`}
+              className={
+                variant === "bubble"
+                  ? "leading-relaxed"
+                  : "rounded-xl sm:rounded-2xl border border-border-light glass-strong p-3 sm:p-4 text-left hover:border-accent/30 transition-all duration-200"
+              }
+            >
+              <div className="flex items-start gap-2 sm:gap-3">
+                <div className="mt-0.5 sm:mt-1 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-accent/20 text-accent text-xs sm:text-sm font-bold flex-shrink-0 shadow-glow-sm">
+                  {idx + 1}
+                </div>
+                <div className="min-w-0 flex-1">
+                  {item.title && (
+                    <div
+                      className={
+                        variant === "bubble"
+                          ? "font-semibold text-foreground text-sm sm:text-base"
+                          : "font-semibold text-foreground text-sm sm:text-base md:text-lg mb-1"
+                      }
+                    >
+                      {linkedBusiness ? (
+                        <a
+                          href={linkedBusiness.url}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="hover:text-accent transition-colors underline-offset-2 hover:underline"
+                        >
+                          {item.title}
+                        </a>
+                      ) : (
+                        item.title
+                      )}
+                    </div>
+                  )}
                   <div
                     className={
                       variant === "bubble"
-                        ? "font-semibold text-foreground text-sm sm:text-base"
-                        : "font-semibold text-foreground text-sm sm:text-base md:text-lg mb-1"
+                        ? "text-foreground/80 text-xs sm:text-sm leading-relaxed"
+                        : "text-foreground/80 text-xs sm:text-sm md:text-base leading-relaxed"
                     }
                   >
-                    {linkedBusiness ? (
-                      <a
-                        href={linkedBusiness.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="hover:text-accent transition-colors underline-offset-2 hover:underline"
-                      >
-                        {item.title}
-                      </a>
-                    ) : (
-                      item.title
-                    )}
+                    {item.body}
                   </div>
-                )}
-                <div
-                  className={
-                    variant === "bubble"
-                      ? "text-foreground/80 text-xs sm:text-sm leading-relaxed"
-                      : "text-foreground/80 text-xs sm:text-sm md:text-base leading-relaxed"
-                  }
-                >
-                  {item.body}
                 </div>
               </div>
-            </div>
-          </li>
+            </li>
           );
         })}
       </ol>

@@ -57,7 +57,6 @@ export async function chatAction(
     const businesses = extractBusinessesFromResponse(response);
 
     // Check for booking intent in the user's query
-    // Check for booking intent in the user's query
     // Matches: "book", "reserve", "reservation", "table", "lets do 12pm", "how about 7", "party of 4", "schedule"
     const bookingKeywords = /\b(book|reserve|reservation|table|schedule|party of)\b|(\blets do\b)|(\bhow about\b)/i;
     const shouldBook = bookingKeywords.test(query);
