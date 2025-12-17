@@ -10,7 +10,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Clutch - Emergency Reservations",
-  description: "High Agency Dinner Finder. One click. We decide.",
+  description: "High Agency Emergency Finder. One click. We decide.",
 };
 
 export const viewport = {

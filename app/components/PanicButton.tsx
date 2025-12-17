@@ -59,12 +59,12 @@ export function PanicButton({ onClick, isLoading, disabled }: PanicButtonProps) 
               <Sparkles className="w-12 h-12 md:w-16 md:h-16" />
               <span>CLUTCH</span>
               <span className="text-sm md:text-base font-normal opacity-90">
-                Emergency Dinner
+                Emergency Finder
               </span>
             </>
           )}
         </div>
-      </motion.button>
-    </div>
+      </motion.button >
+    </div >
   );
 }
