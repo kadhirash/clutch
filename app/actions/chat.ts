@@ -9,6 +9,7 @@ export type ChatActionState = {
   businesses?: BusinessEntity[];
   chatId?: string;
   error?: string;
+  shouldBook?: boolean;
 };
 
 export async function chatAction(
@@ -55,11 +56,16 @@ export async function chatAction(
     // Extract businesses from response if any
     const businesses = extractBusinessesFromResponse(response);
 
+    // Check for booking intent in the user's query
+    const bookingKeywords = /\b(book|reserve|reservation|table)\b/i;
+    const shouldBook = bookingKeywords.test(query);
+
     return {
       message: "Success",
       aiResponse: response.response.text,
       businesses: businesses.length > 0 ? businesses : undefined,
       chatId: response.chat_id,
+      shouldBook, // Return the intent flag
     };
   } catch (err) {
     console.error("Chat Action Error:", err);

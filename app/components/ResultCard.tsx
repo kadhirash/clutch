@@ -13,8 +13,7 @@ interface ResultCardProps {
   onReset: () => void;
 }
 
-export function ResultCard({ business, aiMessage, onReset }: ResultCardProps) {
-  const [isReservationOpen, setIsReservationOpen] = useState(false);
+export function ResultCard({ business, aiMessage, onReset, isReservationOpen, onOpenReservation, onCloseReservation }: ResultCardProps & { isReservationOpen: boolean; onOpenReservation: () => void; onCloseReservation: () => void }) {
 
   const openInMaps = () => {
     const { latitude, longitude } = business.coordinates;
@@ -130,7 +129,7 @@ export function ResultCard({ business, aiMessage, onReset }: ResultCardProps) {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setIsReservationOpen(true)}
+              onClick={onOpenReservation}
               className="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg"
             >
               <Calendar className="w-5 h-5" />
@@ -170,7 +169,7 @@ export function ResultCard({ business, aiMessage, onReset }: ResultCardProps) {
 
       <ReservationModal
         isOpen={isReservationOpen}
-        onClose={() => setIsReservationOpen(false)}
+        onClose={onCloseReservation}
         restaurantName={business.name}
       />
     </motion.div>
