@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Loader2 } from "lucide-react";
 
@@ -13,51 +13,73 @@ interface VoiceInputProps {
 export function VoiceInput({ onTranscript, isProcessing = false, disabled = false }: VoiceInputProps) {
     const [isListening, setIsListening] = useState(false);
     const [isSupported, setIsSupported] = useState(false);
-    const [recognition, setRecognition] = useState<any>(null);
+    const recognitionRef = useRef<any>(null);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
             // @ts-ignore - WebkitSpeechRecognition is not in standard types
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            setIsSupported(!!SpeechRecognition);
+        }
+    }, []);
 
-            if (SpeechRecognition) {
-                const recognitionInstance = new SpeechRecognition();
-                recognitionInstance.continuous = false;
-                recognitionInstance.interimResults = false;
-                recognitionInstance.lang = "en-US";
+    const startListening = useCallback(() => {
+        // @ts-ignore - WebkitSpeechRecognition is not in standard types
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) return;
 
-                recognitionInstance.onstart = () => setIsListening(true);
-                recognitionInstance.onend = () => setIsListening(false);
-                recognitionInstance.onerror = (event: any) => {
-                    console.error("Speech recognition error", event.error);
-                    setIsListening(false);
-                };
-                recognitionInstance.onresult = (event: any) => {
-                    const transcript = event.results[0][0].transcript;
-                    if (transcript) {
-                        onTranscript(transcript);
-                    }
-                };
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = "en-US";
 
-                setRecognition(recognitionInstance);
-                setIsSupported(true);
+        recognition.onstart = () => {
+            console.log("Recognition started");
+            setIsListening(true);
+        };
+
+        recognition.onend = () => {
+            console.log("Recognition ended");
+            setIsListening(false);
+            recognitionRef.current = null; // Cleanup on end
+        };
+
+        recognition.onerror = (event: any) => {
+            console.error("Speech recognition error", event.error);
+            setIsListening(false);
+            recognitionRef.current = null;
+        };
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            console.log("Transcript received:", transcript);
+            if (transcript) {
+                onTranscript(transcript);
             }
+        };
+
+        recognitionRef.current = recognition;
+        try {
+            recognition.start();
+        } catch (e) {
+            console.error("Failed to start recognition", e);
         }
     }, [onTranscript]);
 
-    const toggleListening = useCallback(() => {
-        if (!recognition) return;
-
-        if (isListening) {
-            recognition.stop();
-        } else {
-            try {
-                recognition.start();
-            } catch (e) {
-                console.error("Failed to start recognition", e);
-            }
+    const stopListening = useCallback(() => {
+        if (recognitionRef.current) {
+            console.log("Stopping recognition...");
+            recognitionRef.current.stop();
         }
-    }, [isListening, recognition]);
+    }, []);
+
+    const toggleListening = useCallback(() => {
+        if (isListening) {
+            stopListening();
+        } else {
+            startListening();
+        }
+    }, [isListening, startListening, stopListening]);
 
     if (!isSupported) return null;
 
