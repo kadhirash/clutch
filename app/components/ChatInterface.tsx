@@ -6,6 +6,7 @@ import { Send, User, Bot } from "lucide-react";
 import { VoiceInput } from "./VoiceInput";
 import { chatAction, ChatActionState } from "../actions/chat";
 import { BusinessEntity } from "../types/ai-chat";
+import { AiMessage } from "./AiMessage";
 
 interface ChatInterfaceProps {
     chatId?: string;
@@ -98,9 +99,9 @@ export function ChatInterface({
     };
 
     return (
-        <div className="w-full max-w-2xl mx-auto mt-8 bg-card-bg/50 border border-border rounded-2xl overflow-hidden backdrop-blur-sm flex flex-col h-[400px]">
+        <div className="w-full max-w-2xl mx-auto mt-6 md:mt-8 bg-card-bg/50 border border-border rounded-2xl overflow-hidden backdrop-blur-sm flex flex-col h-[55vh] min-h-[320px] max-h-[520px] sm:h-[420px]">
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-4 space-y-4">
+            <div className="flex-1 overflow-y-auto overscroll-contain p-4 space-y-4">
                 {messages.map((msg) => (
                     <motion.div
                         key={msg.id}
@@ -121,7 +122,11 @@ export function ChatInterface({
                                 : "bg-neutral-800 text-foreground/90 rounded-tl-none"
                             }
             `}>
-                            {msg.text}
+                            {msg.role === "ai" ? (
+                                <AiMessage text={msg.text} variant="bubble" />
+                            ) : (
+                                msg.text
+                            )}
                         </div>
                     </motion.div>
                 ))}
@@ -140,9 +145,9 @@ export function ChatInterface({
             </div>
 
             {/* Input Area */}
-            <div className="p-4 border-t border-border bg-card-bg">
+            <div className="p-3 sm:p-4 border-t border-border bg-card-bg">
                 <form onSubmit={handleSubmit} className="flex items-center gap-2">
-                    <div className="relative flex-1">
+                    <div className="relative flex-1 min-w-0">
                         <input
                             type="text"
                             value={input}

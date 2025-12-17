@@ -135,18 +135,22 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden">
+    <main
+      className={`min-h-[100dvh] flex flex-col items-center p-4 md:p-8 relative overflow-hidden ${
+        result || chatId ? "justify-start pt-6 md:pt-10" : "justify-center"
+      }`}
+    >
       {/* Background Gradient Blob */}
       <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-accent/20 blur-[120px] rounded-full pointer-events-none z-0" />
       <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none z-0" />
 
       {/* Header */}
       {!result && !chatId && (
-        <div className="text-center mb-12 space-y-4">
-          <h1 className="text-4xl md:text-6xl font-bold text-foreground">
+        <div className="text-center mb-10 md:mb-12 space-y-4">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-foreground">
             CLUTCH
           </h1>
-          <p className="text-lg md:text-xl text-foreground/70 max-w-md mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-foreground/70 max-w-md mx-auto">
             Emergency concierge.
             <br />
             <span className="text-accent font-semibold">
@@ -166,7 +170,7 @@ export default function Home() {
       {/* Main Content */}
       <div className="flex-1 w-full flex flex-col items-center max-w-4xl mx-auto">
         {(result || chatId) ? (
-          <div className="w-full space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
+          <div className="w-full space-y-5 md:space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
             {result && (
               <ResultCard
                 business={result}
@@ -179,7 +183,7 @@ export default function Home() {
             )}
 
             {/* Chat Interface for refinement */}
-            <div className="w-full">
+            <div className="w-full pb-6 md:pb-0">
               <ChatInterface
                 chatId={chatId}
                 initialMessage={aiMessage || "I found this place for you. Want something else?"}
@@ -220,7 +224,7 @@ export default function Home() {
                 value={customQuery}
                 onChange={(e) => setCustomQuery(e.target.value)}
                 placeholder="Any specific cravings? (Optional)"
-                className="w-full glass-input rounded-xl px-4 py-4 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-all shadow-lg"
+                className="w-full glass-input rounded-xl px-4 py-3.5 sm:py-4 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-all shadow-lg"
               />
             </div>
 

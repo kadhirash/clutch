@@ -26,13 +26,13 @@ export function LocationInput({
         <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="w-full max-w-md mx-auto mb-8 relative z-20"
+            className="w-full max-w-md mx-auto mb-6 md:mb-8 relative z-20"
         >
             <div className="relative flex items-center">
                 <MapPin className={`absolute left-4 w-5 h-5 ${isUsingCurrentLocation ? "text-accent" : "text-foreground/50"}`} />
 
                 {isUsingCurrentLocation ? (
-                    <div className="w-full glass rounded-xl py-4 pl-12 pr-14 text-foreground shadow-lg flex items-center">
+                    <div className="w-full glass rounded-xl py-3.5 sm:py-4 pl-12 pr-14 text-foreground shadow-lg flex items-center">
                         <span className="font-medium">Current Location</span>
                     </div>
                 ) : (
@@ -41,7 +41,7 @@ export function LocationInput({
                         value={value}
                         onChange={(e) => onChange(e.target.value)}
                         placeholder="Enter City, State or Zip (e.g. New York)"
-                        className="w-full glass-input rounded-xl py-4 pl-12 pr-14 text-foreground placeholder:text-foreground/40 focus:ring-2 focus:ring-accent/50 outline-none shadow-lg"
+                        className="w-full glass-input rounded-xl py-3.5 sm:py-4 pl-12 pr-14 text-foreground placeholder:text-foreground/40 focus:ring-2 focus:ring-accent/50 outline-none shadow-lg"
                     />
                 )}
 
