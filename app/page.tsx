@@ -135,7 +135,11 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+    <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8 relative overflow-hidden">
+      {/* Background Gradient Blob */}
+      <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-accent/20 blur-[120px] rounded-full pointer-events-none z-0" />
+      <div className="fixed bottom-[-20%] right-[-10%] w-[50%] h-[50%] bg-blue-500/10 blur-[120px] rounded-full pointer-events-none z-0" />
+
       {/* Header */}
       {!result && !chatId && (
         <div className="text-center mb-12 space-y-4">
@@ -216,7 +220,7 @@ export default function Home() {
                 value={customQuery}
                 onChange={(e) => setCustomQuery(e.target.value)}
                 placeholder="Any specific cravings? (Optional)"
-                className="w-full bg-neutral-900/50 border border-neutral-800 text-foreground placeholder:text-neutral-500 rounded-xl px-4 py-4 focus:outline-none focus:ring-1 focus:ring-neutral-700 transition-all"
+                className="w-full glass-input rounded-xl px-4 py-4 focus:outline-none focus:ring-1 focus:ring-accent/50 transition-all shadow-lg"
               />
             </div>
 

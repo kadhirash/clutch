@@ -49,17 +49,18 @@ export function ResultCard({ business, aiMessage, onReset, isReservationOpen, on
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 0.3 }}
-        className="bg-card-bg border border-border rounded-2xl overflow-hidden shadow-2xl"
+        className="glass-card rounded-2xl overflow-hidden"
       >
         {/* Restaurant Image */}
-        <div className="relative w-full h-64 md:h-80 bg-neutral-800">
+        <div className="relative w-full h-64 md:h-80 bg-neutral-800 overflow-hidden group">
           <Image
             src={business.image_url}
             alt={business.name}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-700 group-hover:scale-110"
             priority
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60" />
         </div>
 
         {/* Restaurant Info */}
@@ -126,43 +127,31 @@ export function ResultCard({ business, aiMessage, onReset, isReservationOpen, on
 
           {/* Action Buttons */}
           <div className="pt-4 space-y-3">
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={onOpenReservation}
-              className="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg"
-            >
-              <Calendar className="w-5 h-5" />
-              Book a Table
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={openInMaps}
-              className="w-full bg-neutral-800 hover:bg-neutral-700 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors"
-            >
-              <Navigation className="w-5 h-5" />
-              Navigate Now
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={openYelpPage}
-              className="w-full bg-neutral-800 hover:bg-neutral-700 text-white font-semibold py-4 px-6 rounded-xl transition-colors"
-            >
-              View on Yelp
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={onReset}
-              className="w-full bg-transparent border border-border hover:bg-neutral-800 text-foreground/70 hover:text-foreground font-medium py-3 px-6 rounded-xl transition-colors"
-            >
-              Find Another Place
-            </motion.button>
+            {[
+              { label: "Book a Table", icon: Calendar, onClick: onOpenReservation, primary: true },
+              { label: "Navigate Now", icon: Navigation, onClick: openInMaps },
+              { label: "View on Yelp", icon: null, onClick: openYelpPage },
+              { label: "Find Another Place", icon: null, onClick: onReset, outline: true }
+            ].map((btn, i) => (
+              <motion.button
+                key={btn.label}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 + (i * 0.1) }}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                onClick={btn.onClick}
+                className={`w-full font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all ${btn.primary
+                    ? "bg-accent hover:bg-accent-hover text-white shadow-lg shadow-accent/20"
+                    : btn.outline
+                      ? "bg-transparent border border-white/10 hover:bg-white/5 text-foreground/70 hover:text-foreground"
+                      : "bg-white/5 hover:bg-white/10 text-white border border-white/5"
+                  }`}
+              >
+                {btn.icon && <btn.icon className="w-5 h-5" />}
+                {btn.label}
+              </motion.button>
+            ))}
           </div>
         </div>
       </motion.div>

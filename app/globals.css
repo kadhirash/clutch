@@ -23,4 +23,16 @@
   .text-balance {
     text-wrap: balance;
   }
+
+  .glass {
+    @apply bg-neutral-900/60 backdrop-blur-md border border-white/10;
+  }
+
+  .glass-card {
+    @apply bg-neutral-900/80 backdrop-blur-xl border border-white/10 shadow-2xl;
+  }
+
+  .glass-input {
+    @apply bg-neutral-900/50 backdrop-blur-sm border border-white/10 focus:border-accent/50 transition-all;
+  }
 }
