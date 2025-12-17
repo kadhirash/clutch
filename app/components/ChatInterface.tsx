@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Send, User, Bot } from "lucide-react";
+import { VoiceInput } from "./VoiceInput";
 import { chatAction, ChatActionState } from "../actions/chat";
 import { BusinessEntity } from "../types/ai-chat";
 
@@ -141,6 +142,11 @@ export function ChatInterface({
             {/* Input Area */}
             <div className="p-4 border-t border-border bg-card-bg">
                 <form onSubmit={handleSubmit} className="flex items-center gap-2">
+                    <VoiceInput
+                        onTranscript={(text) => handleSend(text)}
+                        isProcessing={isLoading}
+                    />
+
                     <input
                         type="text"
                         value={input}
