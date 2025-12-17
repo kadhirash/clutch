@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
 import { Star, MapPin, Navigation, Phone, DollarSign, Calendar } from "lucide-react";
 import { BusinessEntity } from "@/app/types/ai-chat";
 import Image from "next/image";
 import { ReservationModal } from "./ReservationModal";
+import { AiMessage } from "./AiMessage";
 
 interface ResultCardProps {
   business: BusinessEntity;
@@ -38,9 +38,9 @@ export function ResultCard({ business, aiMessage, onReset, isReservationOpen, on
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="mb-6 p-4 bg-card-bg border border-border rounded-lg"
+          className="mb-5 md:mb-6 p-3 sm:p-4 bg-card-bg border border-border rounded-lg"
         >
-          <p className="text-foreground/90 text-center">{aiMessage}</p>
+          <AiMessage text={aiMessage} variant="card" />
         </motion.div>
       )}
 
@@ -52,7 +52,7 @@ export function ResultCard({ business, aiMessage, onReset, isReservationOpen, on
         className="glass-card rounded-2xl overflow-hidden"
       >
         {/* Restaurant Image */}
-        <div className="relative w-full h-64 md:h-80 bg-neutral-800 overflow-hidden group">
+        <div className="relative w-full h-56 sm:h-64 md:h-80 bg-neutral-800 overflow-hidden group">
           <Image
             src={business.image_url}
             alt={business.name}
@@ -64,9 +64,9 @@ export function ResultCard({ business, aiMessage, onReset, isReservationOpen, on
         </div>
 
         {/* Restaurant Info */}
-        <div className="p-6 space-y-4">
+        <div className="p-4 sm:p-6 space-y-4">
           {/* Name */}
-          <h2 className="text-3xl md:text-4xl font-bold text-foreground">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
             {business.name}
           </h2>
 
@@ -92,7 +92,7 @@ export function ResultCard({ business, aiMessage, onReset, isReservationOpen, on
             {business.categories.slice(0, 3).map((cat) => (
               <span
                 key={cat.alias}
-                className="px-3 py-1 bg-neutral-800 rounded-full text-sm text-foreground/80"
+                className="px-3 py-1 bg-neutral-800/70 rounded-full text-xs sm:text-sm text-foreground/80"
               >
                 {cat.title}
               </span>
@@ -141,7 +141,7 @@ export function ResultCard({ business, aiMessage, onReset, isReservationOpen, on
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={btn.onClick}
-                className={`w-full font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-all ${btn.primary
+                className={`w-full font-semibold py-3.5 sm:py-4 px-5 sm:px-6 rounded-xl flex items-center justify-center gap-2 transition-all ${btn.primary
                     ? "bg-accent hover:bg-accent-hover text-white shadow-lg shadow-accent/20"
                     : btn.outline
                       ? "bg-transparent border border-white/10 hover:bg-white/5 text-foreground/70 hover:text-foreground"

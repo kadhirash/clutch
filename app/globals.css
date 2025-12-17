@@ -2,6 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
+
 :root {
   --background: #0a0a0a;
   --foreground: #ededed;
@@ -9,6 +11,7 @@
   --accent-hover: #dc2626;
   --card-bg: #171717;
   --border: #262626;
+  --font-geist-sans: "Inter";
 }
 
 @layer base {
