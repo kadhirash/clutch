@@ -96,8 +96,10 @@ export default function Home() {
         setAiMessage(state.aiResponse || null);
         setChatId(state.chatId);
       } else if (state.aiResponse) {
-        // AI responded but no businesses found
-        setError(state.aiResponse);
+        // AI responded but no businesses found (e.g. asking for clarification)
+        setAiMessage(state.aiResponse);
+        setChatId(state.chatId);
+        setResult(null);
       } else {
         setError("No restaurants found. Please try again.");
       }
@@ -113,13 +115,14 @@ export default function Home() {
     setResult(null);
     setAiMessage(null);
     setError(null);
+    setChatId(undefined); // Reset chat ID
     setCustomQuery(""); // Optional: clear query on reset
   };
 
   return (
     <main className="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
       {/* Header */}
-      {!result && (
+      {!result && !chatId && (
         <div className="text-center mb-12 space-y-4">
           <h1 className="text-4xl md:text-6xl font-bold text-foreground">
             CLUTCH
@@ -135,7 +138,7 @@ export default function Home() {
       )}
 
       {/* Error Message */}
-      {error && !result && (
+      {error && !result && !chatId && (
         <div className="mb-8 p-4 bg-red-900/20 border border-red-500/50 rounded-lg max-w-md text-center">
           <p className="text-red-200">{error}</p>
         </div>
@@ -143,13 +146,15 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="flex-1 w-full flex flex-col items-center max-w-4xl mx-auto">
-        {result ? (
+        {(result || chatId) ? (
           <div className="w-full space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <ResultCard
-              business={result}
-              aiMessage={aiMessage || undefined}
-              onReset={handleReset}
-            />
+            {result && (
+              <ResultCard
+                business={result}
+                aiMessage={aiMessage || undefined}
+                onReset={handleReset}
+              />
+            )}
 
             {/* Chat Interface for refinement */}
             <div className="w-full">
@@ -165,6 +170,16 @@ export default function Home() {
                 onUpdateChatId={(newChatId) => setChatId(newChatId)}
               />
             </div>
+
+            {/* Show reset button if only chatting without result */}
+            {!result && (
+              <button
+                onClick={handleReset}
+                className="mx-auto block text-sm text-foreground/50 hover:text-foreground transition-colors"
+              >
+                Start Over
+              </button>
+            )}
           </div>
         ) : (
           <div className="w-full flex flex-col items-center gap-4 max-w-md mx-auto">
@@ -191,7 +206,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      {!result && (
+      {!result && !chatId && (
         <div className="mt-12 text-center text-sm text-foreground/50">
           <p>Powered by Yelp AI</p>
           {!userLocation && !manualLocation && !isLoading && (
