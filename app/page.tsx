@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { PanicButton } from "./components/PanicButton";
 import { ResultCard } from "./components/ResultCard";
 import { ChatInterface } from "./components/ChatInterface";
+import { LocationInput } from "./components/LocationInput";
+import { VoiceInput } from "./components/VoiceInput";
 import { chatAction, ChatActionState } from "./actions/chat";
 import { BusinessEntity } from "./types/ai-chat";
 
@@ -17,24 +19,33 @@ export default function Home() {
     latitude: number;
     longitude: number;
   } | null>(null);
+  const [manualLocation, setManualLocation] = useState("");
+  const [customQuery, setCustomQuery] = useState("");
+  const [isDetectingLocation, setIsDetectingLocation] = useState(false);
 
   // Get user location on mount
   useEffect(() => {
+    handleDetectLocation();
+  }, []);
+
+  const handleDetectLocation = () => {
     if ("geolocation" in navigator) {
+      setIsDetectingLocation(true);
       navigator.geolocation.getCurrentPosition(
         (position) => {
           setUserLocation({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
+          setIsDetectingLocation(false);
         },
         (error) => {
           console.error("Error getting location:", error);
-          // Continue without location - Yelp AI can still work
+          setIsDetectingLocation(false);
         }
       );
     }
-  }, []);
+  };
 
   const handlePanicClick = async () => {
     setIsLoading(true);
@@ -45,10 +56,13 @@ export default function Home() {
     try {
       // Create FormData for server action
       const formData = new FormData();
-      formData.append(
-        "query",
-        "I need dinner right now! Find me a highly rated restaurant that's open now and nearby."
-      );
+
+      // Use custom query if provided, otherwise default panic message
+      const queryText = customQuery.trim()
+        ? customQuery
+        : "I need dinner right now! Find me a highly rated restaurant that's open now and nearby.";
+
+      formData.append("query", queryText);
 
       if (chatId) {
         formData.append("chatId", chatId);
@@ -57,6 +71,12 @@ export default function Home() {
       if (userLocation) {
         formData.append("latitude", userLocation.latitude.toString());
         formData.append("longitude", userLocation.longitude.toString());
+      } else if (manualLocation.trim()) {
+        formData.append("location", manualLocation);
+      } else {
+        setError("Please allow location access or enter your city manually.");
+        setIsLoading(false);
+        return;
       }
 
       // Call server action
@@ -93,6 +113,7 @@ export default function Home() {
     setResult(null);
     setAiMessage(null);
     setError(null);
+    setCustomQuery(""); // Optional: clear query on reset
   };
 
   return (
@@ -146,7 +167,32 @@ export default function Home() {
             </div>
           </div>
         ) : (
-          <PanicButton onClick={handlePanicClick} isLoading={isLoading} />
+          <div className="w-full flex flex-col items-center gap-4 max-w-md mx-auto">
+            <LocationInput
+              value={manualLocation}
+              onChange={setManualLocation}
+              onDetectLocation={handleDetectLocation}
+              isDetecting={isDetectingLocation}
+            />
+
+            <div className="relative w-full">
+              <input
+                type="text"
+                value={customQuery}
+                onChange={(e) => setCustomQuery(e.target.value)}
+                placeholder="Any specific cravings? (Optional)"
+                className="w-full bg-neutral-900/80 border border-border rounded-xl pl-4 pr-12 py-3 text-foreground placeholder:text-foreground/40 focus:ring-2 focus:ring-accent/50 outline-none backdrop-blur-sm transition-all text-center"
+              />
+              <div className="absolute right-2 top-1/2 -translate-y-1/2">
+                <VoiceInput
+                  onTranscript={(text) => setCustomQuery(text)}
+                  isProcessing={isLoading}
+                />
+              </div>
+            </div>
+
+            <PanicButton onClick={handlePanicClick} isLoading={isLoading} />
+          </div>
         )}
       </div>
 
@@ -154,9 +200,9 @@ export default function Home() {
       {!result && (
         <div className="mt-12 text-center text-sm text-foreground/50">
           <p>Powered by Yelp AI</p>
-          {!userLocation && !isLoading && (
+          {!userLocation && !manualLocation && !isLoading && (
             <p className="mt-2 text-yellow-500/70">
-              Enable location for better results
+              Enable location or enter city for results
             </p>
           )}
         </div>
