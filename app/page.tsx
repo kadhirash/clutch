@@ -181,14 +181,8 @@ export default function Home() {
                 value={customQuery}
                 onChange={(e) => setCustomQuery(e.target.value)}
                 placeholder="Any specific cravings? (Optional)"
-                className="w-full bg-neutral-900/80 border border-border rounded-xl pl-4 pr-12 py-3 text-foreground placeholder:text-foreground/40 focus:ring-2 focus:ring-accent/50 outline-none backdrop-blur-sm transition-all text-center"
+                className="w-full bg-neutral-900/50 border border-neutral-800 text-foreground placeholder:text-neutral-500 rounded-xl px-4 py-4 focus:outline-none focus:ring-1 focus:ring-neutral-700 transition-all"
               />
-              <div className="absolute right-2 top-1/2 -translate-y-1/2">
-                <VoiceInput
-                  onTranscript={(text) => setCustomQuery(text)}
-                  isProcessing={isLoading}
-                />
-              </div>
             </div>
 
             <PanicButton onClick={handlePanicClick} isLoading={isLoading} />

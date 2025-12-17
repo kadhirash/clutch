@@ -14,72 +14,72 @@ export function VoiceInput({ onTranscript, isProcessing = false, disabled = fals
     const [isListening, setIsListening] = useState(false);
     const [isSupported, setIsSupported] = useState(false);
     const recognitionRef = useRef<any>(null);
-    const onTranscriptRef = useRef(onTranscript);
-
-    // Update ref when prop changes
-    useEffect(() => {
-        onTranscriptRef.current = onTranscript;
-    }, [onTranscript]);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
             // @ts-ignore - WebkitSpeechRecognition is not in standard types
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-            if (SpeechRecognition) {
-                console.log("Speech Recognition supported");
-                const recognition = new SpeechRecognition();
-                recognition.continuous = false;
-                recognition.interimResults = false;
-                recognition.lang = "en-US";
-
-                recognition.onstart = () => {
-                    console.log("Recognition started");
-                    setIsListening(true);
-                };
-                recognition.onend = () => {
-                    console.log("Recognition ended");
-                    setIsListening(false);
-                };
-                recognition.onerror = (event: any) => {
-                    console.error("Speech recognition error", event.error);
-                    setIsListening(false);
-                };
-                recognition.onresult = (event: any) => {
-                    const transcript = event.results[0][0].transcript;
-                    console.log("Transcript received:", transcript);
-                    if (transcript) {
-                        onTranscriptRef.current(transcript);
-                    }
-                };
-
-                recognitionRef.current = recognition;
-                setIsSupported(true);
-            } else {
-                console.log("Speech Recognition NOT supported");
-            }
+            setIsSupported(!!SpeechRecognition);
         }
-    }, []); // Empty dependency array - only init once
+    }, []);
+
+    const startListening = useCallback(() => {
+        // @ts-ignore - WebkitSpeechRecognition is not in standard types
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) return;
+
+        const recognition = new SpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = "en-US";
+
+        recognition.onstart = () => {
+            console.log("Recognition started");
+            setIsListening(true);
+        };
+
+        recognition.onend = () => {
+            console.log("Recognition ended");
+            setIsListening(false);
+            recognitionRef.current = null; // Cleanup on end
+        };
+
+        recognition.onerror = (event: any) => {
+            console.error("Speech recognition error", event.error);
+            setIsListening(false);
+            recognitionRef.current = null;
+        };
+
+        recognition.onresult = (event: any) => {
+            const transcript = event.results[0][0].transcript;
+            console.log("Transcript received:", transcript);
+            if (transcript) {
+                onTranscript(transcript);
+            }
+        };
+
+        recognitionRef.current = recognition;
+        try {
+            recognition.start();
+        } catch (e) {
+            console.error("Failed to start recognition", e);
+        }
+    }, [onTranscript]);
+
+    const stopListening = useCallback(() => {
+        if (recognitionRef.current) {
+            console.log("Stopping recognition...");
+            recognitionRef.current.stop();
+        }
+    }, []);
 
     const toggleListening = useCallback(() => {
-        const recognition = recognitionRef.current;
-        if (!recognition) {
-            console.log("No recognition instance found");
-            return;
-        }
-
         if (isListening) {
-            console.log("Stopping recognition...");
-            recognition.stop();
+            stopListening();
         } else {
-            try {
-                console.log("Starting recognition...");
-                recognition.start();
-            } catch (e) {
-                console.error("Failed to start recognition", e);
-            }
+            startListening();
         }
-    }, [isListening]);
+    }, [isListening, startListening, stopListening]);
 
     if (!isSupported) return null;
 

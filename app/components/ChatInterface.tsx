@@ -142,20 +142,20 @@ export function ChatInterface({
             {/* Input Area */}
             <div className="p-4 border-t border-border bg-card-bg">
                 <form onSubmit={handleSubmit} className="flex items-center gap-2">
-                    <VoiceInput
-                        onTranscript={(text) => handleSend(text)}
-                        isProcessing={isLoading}
-                    />
-
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={(e) => setInput(e.target.value)}
-                        placeholder="Type a message... (e.g. 'Too expensive', 'I want sushi')"
-                        className="flex-1 bg-neutral-800 border-none rounded-xl px-4 py-3 text-foreground placeholder:text-foreground/40 focus:ring-2 focus:ring-accent/50 outline-none transition-all"
-                        disabled={isLoading}
-                    />
-
+                    <div className="relative flex-1">
+                        <input
+                            type="text"
+                            value={input}
+                            onChange={(e) => setInput(e.target.value)}
+                            placeholder="Ask follow-up questions..."
+                            className="w-full bg-neutral-900 border border-neutral-800 text-foreground placeholder:text-neutral-500 rounded-xl px-4 py-3 focus:outline-none focus:ring-1 focus:ring-neutral-700 transition-all"
+                            disabled={isLoading}
+                        />
+                        {/* Voice Input removed for stability */}
+                        {/* <div className="absolute right-2 top-1/2 -translate-y-1/2">
+            <VoiceInput onTranscript={handleVoiceTranscript} isProcessing={isLoading} />
+          </div> */}
+                    </div>
                     <button
                         type="submit"
                         disabled={!input.trim() || isLoading}
