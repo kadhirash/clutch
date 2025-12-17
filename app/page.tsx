@@ -37,6 +37,7 @@ export default function Home() {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           });
+          setManualLocation(""); // Clear manual input when using GPS
           setIsDetectingLocation(false);
         },
         (error) => {
@@ -45,6 +46,11 @@ export default function Home() {
         }
       );
     }
+  };
+
+  const handleClearLocation = () => {
+    setUserLocation(null);
+    setManualLocation("");
   };
 
   const handlePanicClick = async () => {
@@ -99,7 +105,11 @@ export default function Home() {
         // AI responded but no businesses found (e.g. asking for clarification)
         setAiMessage(state.aiResponse);
         setChatId(state.chatId);
-        setResult(null);
+        // CRITICAL FIX: Do NOT clear result here if we already have one.
+        // This ensures the "Book a Table" button stays visible during conversation.
+        if (!result) {
+          setResult(null);
+        }
       } else {
         setError("No restaurants found. Please try again.");
       }
@@ -188,6 +198,8 @@ export default function Home() {
               onChange={setManualLocation}
               onDetectLocation={handleDetectLocation}
               isDetecting={isDetectingLocation}
+              isUsingCurrentLocation={!!userLocation}
+              onClear={handleClearLocation}
             />
 
             <div className="relative w-full">
