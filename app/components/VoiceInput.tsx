@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Mic, MicOff, Loader2 } from "lucide-react";
 
@@ -13,7 +13,13 @@ interface VoiceInputProps {
 export function VoiceInput({ onTranscript, isProcessing = false, disabled = false }: VoiceInputProps) {
     const [isListening, setIsListening] = useState(false);
     const [isSupported, setIsSupported] = useState(false);
-    const [recognition, setRecognition] = useState<any>(null);
+    const recognitionRef = useRef<any>(null);
+    const onTranscriptRef = useRef(onTranscript);
+
+    // Update ref when prop changes
+    useEffect(() => {
+        onTranscriptRef.current = onTranscript;
+    }, [onTranscript]);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -22,40 +28,41 @@ export function VoiceInput({ onTranscript, isProcessing = false, disabled = fals
 
             if (SpeechRecognition) {
                 console.log("Speech Recognition supported");
-                const recognitionInstance = new SpeechRecognition();
-                recognitionInstance.continuous = false;
-                recognitionInstance.interimResults = false;
-                recognitionInstance.lang = "en-US";
+                const recognition = new SpeechRecognition();
+                recognition.continuous = false;
+                recognition.interimResults = false;
+                recognition.lang = "en-US";
 
-                recognitionInstance.onstart = () => {
+                recognition.onstart = () => {
                     console.log("Recognition started");
                     setIsListening(true);
                 };
-                recognitionInstance.onend = () => {
+                recognition.onend = () => {
                     console.log("Recognition ended");
                     setIsListening(false);
                 };
-                recognitionInstance.onerror = (event: any) => {
+                recognition.onerror = (event: any) => {
                     console.error("Speech recognition error", event.error);
                     setIsListening(false);
                 };
-                recognitionInstance.onresult = (event: any) => {
+                recognition.onresult = (event: any) => {
                     const transcript = event.results[0][0].transcript;
                     console.log("Transcript received:", transcript);
                     if (transcript) {
-                        onTranscript(transcript);
+                        onTranscriptRef.current(transcript);
                     }
                 };
 
-                setRecognition(recognitionInstance);
+                recognitionRef.current = recognition;
                 setIsSupported(true);
             } else {
                 console.log("Speech Recognition NOT supported");
             }
         }
-    }, [onTranscript]);
+    }, []); // Empty dependency array - only init once
 
     const toggleListening = useCallback(() => {
+        const recognition = recognitionRef.current;
         if (!recognition) {
             console.log("No recognition instance found");
             return;
@@ -72,7 +79,7 @@ export function VoiceInput({ onTranscript, isProcessing = false, disabled = fals
                 console.error("Failed to start recognition", e);
             }
         }
-    }, [isListening, recognition]);
+    }, [isListening]);
 
     if (!isSupported) return null;
 
