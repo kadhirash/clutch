@@ -22,6 +22,7 @@ export default function Home() {
   const [manualLocation, setManualLocation] = useState("");
   const [customQuery, setCustomQuery] = useState("");
   const [isDetectingLocation, setIsDetectingLocation] = useState(false);
+  const [isReservationOpen, setIsReservationOpen] = useState(false);
 
   // Get user location on mount
   useEffect(() => {
@@ -66,7 +67,7 @@ export default function Home() {
       // Use custom query if provided, otherwise default panic message
       const queryText = customQuery.trim()
         ? customQuery
-        : "I need dinner right now! Find me a highly rated restaurant that's open now and nearby.";
+        : "Find me a highly rated spot nearby that's open now.";
 
       formData.append("query", queryText);
 
@@ -110,6 +111,10 @@ export default function Home() {
         if (!result) {
           setResult(null);
         }
+        // Check for booking intent from the server
+        if (state.shouldBook) {
+          setIsReservationOpen(true);
+        }
       } else {
         setError("No restaurants found. Please try again.");
       }
@@ -138,7 +143,7 @@ export default function Home() {
             CLUTCH
           </h1>
           <p className="text-lg md:text-xl text-foreground/70 max-w-md mx-auto">
-            Emergency dinner reservations.
+            Emergency concierge.
             <br />
             <span className="text-accent font-semibold">
               One click. We decide.
@@ -163,6 +168,9 @@ export default function Home() {
                 business={result}
                 aiMessage={aiMessage || undefined}
                 onReset={handleReset}
+                isReservationOpen={isReservationOpen}
+                onOpenReservation={() => setIsReservationOpen(true)}
+                onCloseReservation={() => setIsReservationOpen(false)}
               />
             )}
 
