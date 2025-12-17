@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 import { Send, User, Bot } from "lucide-react";
 import { VoiceInput } from "./VoiceInput";
 import { chatAction, ChatActionState } from "../actions/chat";
