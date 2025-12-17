@@ -1,4 +1,4 @@
-# Clutch ⚡️
+# Clutch 
 
 > **High Agency Emergency Finder. One click. We decide.**
 
@@ -6,29 +6,29 @@ Clutch is an AI-powered concierge designed for decision fatigue. Instead of scro
 
 ![Clutch Demo](https://github.com/user-attachments/assets/placeholder-image)
 
-## 🚀 Key Features
+## Key Features
 
-### 🤖 AI Concierge
+### AI Concierge
 Powered by the **Yelp Fusion AI API**, Clutch understands natural language queries and context. It doesn't just search; it recommends.
 
-### 🧠 Smart Booking Intent
+### Smart Booking Intent
 Don't just find a place—book it. Clutch detects booking intent in your conversation.
 *   *"Lets do 12pm"*
 *   *"Book a table for 4"*
 *   *"Schedule for 7:30"*
 All these trigger the **Reservation Modal**, bypassing the API's limitation on direct bookings.
 
-### 📍 Intelligent Location
+### Intelligent Location
 *   **Auto-Detect**: Uses the browser's Geolocation API for instant results.
 *   **Manual Override**: Easily switch to a specific city or zip code.
 *   **Context Aware**: The AI knows where you are and filters results accordingly.
 
-### 💎 Premium UI/UX
+### Premium UI/UX
 *   **Glassmorphism**: A modern, dark-mode aesthetic with frosted glass effects.
 *   **Motion**: Smooth animations powered by Framer Motion.
 *   **Responsive**: Works perfectly on mobile for on-the-go emergencies.
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 *   **Framework**: [Next.js 14](https://nextjs.org/) (App Router)
 *   **AI**: [Yelp Fusion AI API](https://docs.developer.yelp.com/docs/yelp-fusion-ai-api) (`/ai/chat/v2`)
@@ -36,7 +36,7 @@ All these trigger the **Reservation Modal**, bypassing the API's limitation on d
 *   **Animations**: [Framer Motion](https://www.framer.com/motion/)
 *   **Icons**: [Lucide React](https://lucide.dev/)
 
-## 🏃‍♂️ Getting Started
+## Getting Started
 
 1.  **Clone the repository**
     ```bash
@@ -62,6 +62,6 @@ All these trigger the **Reservation Modal**, bypassing the API's limitation on d
 
 5.  Open [http://localhost:3000](http://localhost:3000) with your browser.
 
-## 🤝 Contributing
+## Contributing
 
 This project was built for the **Yelp AI Hackathon 2025**.
