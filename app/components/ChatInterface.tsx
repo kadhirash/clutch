@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 import { Send, User, Bot } from "lucide-react";
 import { VoiceInput } from "./VoiceInput";
 import { chatAction, ChatActionState } from "../actions/chat";
@@ -121,7 +122,19 @@ export function ChatInterface({
                                 : "bg-neutral-800 text-foreground/90 rounded-tl-none"
                             }
             `}>
-                            {msg.text}
+                            <div className="prose prose-invert prose-sm max-w-none">
+                                <ReactMarkdown
+                                    components={{
+                                        p: ({ children }) => <p className="mb-2 last:mb-0">{children}</p>,
+                                        ul: ({ children }) => <ul className="list-disc pl-4 mb-2 space-y-1">{children}</ul>,
+                                        ol: ({ children }) => <ol className="list-decimal pl-4 mb-2 space-y-1">{children}</ol>,
+                                        li: ({ children }) => <li className="mb-1">{children}</li>,
+                                        strong: ({ children }) => <span className="font-bold text-accent">{children}</span>,
+                                    }}
+                                >
+                                    {msg.text}
+                                </ReactMarkdown>
+                            </div>
                         </div>
                     </motion.div>
                 ))}
