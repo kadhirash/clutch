@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { Star, MapPin, Navigation, Phone, DollarSign } from "lucide-react";
+import { Star, MapPin, Navigation, Phone, DollarSign, Calendar } from "lucide-react";
 import { BusinessEntity } from "@/app/types/ai-chat";
 import Image from "next/image";
+import { ReservationModal } from "./ReservationModal";
 
 interface ResultCardProps {
   business: BusinessEntity;
@@ -12,6 +14,8 @@ interface ResultCardProps {
 }
 
 export function ResultCard({ business, aiMessage, onReset }: ResultCardProps) {
+  const [isReservationOpen, setIsReservationOpen] = useState(false);
+
   const openInMaps = () => {
     const { latitude, longitude } = business.coordinates;
     const url = `https://www.google.com/maps/dir/?api=1&destination=${latitude},${longitude}`;
@@ -126,8 +130,18 @@ export function ResultCard({ business, aiMessage, onReset }: ResultCardProps) {
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={openInMaps}
+              onClick={() => setIsReservationOpen(true)}
               className="w-full bg-accent hover:bg-accent-hover text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors shadow-lg"
+            >
+              <Calendar className="w-5 h-5" />
+              Book a Table
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={openInMaps}
+              className="w-full bg-neutral-800 hover:bg-neutral-700 text-white font-semibold py-4 px-6 rounded-xl flex items-center justify-center gap-2 transition-colors"
             >
               <Navigation className="w-5 h-5" />
               Navigate Now
@@ -153,6 +167,12 @@ export function ResultCard({ business, aiMessage, onReset }: ResultCardProps) {
           </div>
         </div>
       </motion.div>
+
+      <ReservationModal
+        isOpen={isReservationOpen}
+        onClose={() => setIsReservationOpen(false)}
+        restaurantName={business.name}
+      />
     </motion.div>
   );
 }
