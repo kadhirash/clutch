@@ -76,6 +76,7 @@ export function VoiceInput({ onTranscript, isProcessing = false, disabled = fals
             </AnimatePresence>
 
             <motion.button
+                type="button"
                 whileTap={{ scale: 0.95 }}
                 whileHover={{ scale: 1.05 }}
                 onClick={toggleListening}

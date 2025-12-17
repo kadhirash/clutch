@@ -39,9 +39,15 @@ export async function chatAction(
       userContext.location = location;
     }
 
+    // If manual location is provided, append it to the query to ensure the AI knows about it
+    let finalQuery = query;
+    if (location && !latitude && !longitude) {
+      finalQuery = `${query} near ${location}`;
+    }
+
     // Send message to Yelp AI API
     const response = await sendChatMessage(
-      query,
+      finalQuery,
       chatId || undefined,
       userContext
     );
