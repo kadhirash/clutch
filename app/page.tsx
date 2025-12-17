@@ -141,6 +141,7 @@ export default function Home() {
                   // Optional: scroll to top to see new card
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
+                onUpdateChatId={(newChatId) => setChatId(newChatId)}
               />
             </div>
           </div>

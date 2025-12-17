@@ -11,6 +11,7 @@ interface ChatInterfaceProps {
     initialMessage?: string; // The first AI response from the panic button
     userLocation: { latitude: number; longitude: number } | null;
     onUpdateBusiness: (business: BusinessEntity) => void;
+    onUpdateChatId: (chatId: string) => void;
 }
 
 interface Message {
@@ -23,7 +24,8 @@ export function ChatInterface({
     chatId: initialChatId,
     initialMessage,
     userLocation,
-    onUpdateBusiness
+    onUpdateBusiness,
+    onUpdateChatId
 }: ChatInterfaceProps) {
     const [messages, setMessages] = useState<Message[]>([]);
     const [input, setInput] = useState("");
@@ -67,7 +69,10 @@ export function ChatInterface({
             if (state.error) {
                 setMessages(prev => [...prev, { id: Date.now().toString(), role: "ai", text: "Sorry, I ran into an issue. Please try again." }]);
             } else {
-                if (state.chatId) setChatId(state.chatId);
+                if (state.chatId) {
+                    setChatId(state.chatId);
+                    onUpdateChatId(state.chatId);
+                }
 
                 if (state.aiResponse) {
                     setMessages(prev => [...prev, { id: Date.now().toString(), role: "ai", text: state.aiResponse || "" }]);
