@@ -4,7 +4,11 @@
 
 Clutch is an AI-powered concierge designed for decision fatigue. Instead of scrolling through endless lists, Clutch uses the **Yelp AI Chat API** to find the perfect spot for you instantly. Whether it's a last-minute dinner, a pharmacy run, or finding a mechanic, Clutch handles the search and the booking intent.
 
-![Clutch Demo](https://github.com/user-attachments/assets/placeholder-image)
+## 🎥 Demo Video
+
+[![Watch the Demo](https://img.youtube.com/vi/_TpU2uuHpiE/maxresdefault.jpg)](https://youtu.be/_TpU2uuHpiE)
+
+**[▶️ Watch on YouTube](https://youtu.be/_TpU2uuHpiE)**
 
 ## Key Features
 
