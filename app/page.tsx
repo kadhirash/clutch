@@ -5,7 +5,6 @@ import { PanicButton } from "./components/PanicButton";
 import { ResultCard } from "./components/ResultCard";
 import { ChatInterface } from "./components/ChatInterface";
 import { LocationInput } from "./components/LocationInput";
-import { VoiceInput } from "./components/VoiceInput";
 import { chatAction, ChatActionState } from "./actions/chat";
 import { BusinessEntity } from "./types/ai-chat";
 
@@ -136,9 +135,8 @@ export default function Home() {
 
   return (
     <main
-      className={`min-h-[100dvh] flex flex-col items-center p-4 md:p-8 relative overflow-hidden ${
-        result || chatId ? "justify-start pt-6 md:pt-10" : "justify-center"
-      }`}
+      className={`min-h-[100dvh] flex flex-col items-center p-4 md:p-8 relative overflow-hidden ${result || chatId ? "justify-start pt-6 md:pt-10" : "justify-center"
+        }`}
     >
       {/* Background Gradient Blob */}
       <div className="fixed top-[-20%] left-[-10%] w-[50%] h-[50%] bg-accent/20 blur-[120px] rounded-full pointer-events-none z-0" />
